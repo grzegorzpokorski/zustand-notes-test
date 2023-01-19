@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 import { useNotesStore } from "../../../store/notesStore";
 
 type NoteProps = {
@@ -10,6 +11,7 @@ export const Note = ({ id, content }: NoteProps) => {
   const { deleteNote, updateNote } = useNotesStore();
   const [isEdited, setIsEdited] = useState(false);
   const [newContent, setNewContent] = useState(content);
+  const [isError, setIsError] = useState(false);
 
   return (
     <li className="py-3 flex flex-row gap-3 items-start md:items-center justify-between">
@@ -17,9 +19,16 @@ export const Note = ({ id, content }: NoteProps) => {
         <>
           <input
             type="text"
-            className="grow"
+            className={twMerge("grow", isError && "border-red-500 bg-red-100")}
             value={newContent}
-            onChange={(e) => setNewContent(e.target.value)}
+            onChange={(e) => {
+              setNewContent(e.target.value);
+              if (e.target.value) {
+                setIsError(false);
+              } else {
+                setIsError(true);
+              }
+            }}
           />
         </>
       ) : (
@@ -30,11 +39,16 @@ export const Note = ({ id, content }: NoteProps) => {
           <>
             <button
               type="button"
-              className="bg-green-500 text-white hover:bg-green-600 focus:bg-green-600 text-xs px-2 py-1"
+              className="bg-green-500 text-white hover:bg-green-600 focus:bg-green-600 text-xs px-2 py-1 disabled:bg-green-300 disabled:cursor-not-allowed text-black"
+              disabled={isError}
               onClick={() => {
-                updateNote({ id: id, content: newContent });
-                setIsEdited(false);
-                setNewContent(newContent);
+                if (newContent) {
+                  updateNote({ id: id, content: newContent });
+                  setIsEdited(false);
+                  setNewContent(newContent);
+                } else {
+                  setIsError(true);
+                }
               }}
             >
               zapisz
@@ -45,6 +59,7 @@ export const Note = ({ id, content }: NoteProps) => {
               onClick={() => {
                 setIsEdited(false);
                 setNewContent(content);
+                setIsError(false);
               }}
             >
               anuluj
