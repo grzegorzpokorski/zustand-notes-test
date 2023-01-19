@@ -1,5 +1,5 @@
 function App() {
- return <p>hello vite app</p>
+  return <p className="text-red-500">hello vite app</p>;
 }
 
-export default App
+export default App;
