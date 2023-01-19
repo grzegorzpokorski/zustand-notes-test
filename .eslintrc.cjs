@@ -7,6 +7,7 @@ module.exports = {
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
     "eslint-config-prettier",
+    "eslint-plugin-react-hooks",
   ],
   settings: {
     react: {
@@ -19,5 +20,5 @@ module.exports = {
       },
     },
   },
-  rules: {},
+  rules: { "react-hooks/exhaustive-deps": "error" },
 };

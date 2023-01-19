@@ -5,7 +5,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <main>{children}</main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
