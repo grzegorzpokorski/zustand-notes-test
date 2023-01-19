@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Container } from "../../atoms/Container/Container";
 import { useNotesStore } from "../../../store/notesStore";
+import { twMerge } from "tailwind-merge";
 
 export const AddNote = () => {
   const [noteContent, setNoteConetent] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const { setNewNote, currentId, notes } = useNotesStore();
 
@@ -17,16 +19,25 @@ export const AddNote = () => {
       <input
         type="text"
         id="add-note"
-        className="grow"
+        className={twMerge("grow", isError && "border-red-500 bg-red-100")}
         value={noteContent}
-        onChange={(e) => setNoteConetent(e.target.value)}
+        onChange={(e) => {
+          setNoteConetent(e.target.value);
+          if (e.target.value) {
+            setIsError(false);
+          }
+        }}
       />
       <button
         type="button"
         className="bg-blue-500 hover:bg-blue-600 focus:bg-blue-600 text-white px-3 py-2"
         onClick={() => {
-          setNewNote(noteContent);
-          setNoteConetent("");
+          if (noteContent) {
+            setNewNote(noteContent);
+            setNoteConetent("");
+          } else {
+            setIsError(true);
+          }
         }}
       >
         Dodaj
